@@ -16,6 +16,26 @@ app.get('/search/:query', (req, res) => {
         }
     )
 })
+app.get('/author/:query', (req, res) => {
+    const { query } = req.params
+    database.all(
+        statements.author,
+        [query],
+        async (err, rows) => {
+            res.send(rows);
+        }
+    )
+})
+app.get('/category/:query', (req, res) => {
+    const { query } = req.params
+    database.all(
+        statements.category,
+        [query],
+        async (err, rows) => {
+            res.send(rows);
+        }
+    )
+})
 app.get('/return/:isbn', (req, res) => {
     const { isbn } = req.params
     database.run(
@@ -36,10 +56,11 @@ app.get('/take/:isbn', (req, res) => {
         }
     )
 })
-console.log(process.env)
 
 const statements = {
     search: 'select * from books where title like ? or author like ? or isbn = ?;',
+    author: 'select * from books where author = ?;',
+    category: 'select * from books where category = ?;',
     return: 'update books set state = "available" where id in (select id from books where isbn = ? and state = "due" limit 1);',
     take: 'update books set state = "due" where id in (select id from books where isbn = ? and state = "available" limit 1);',
 }

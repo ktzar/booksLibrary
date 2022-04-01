@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from 'react-simple-loading';
 
 export function Take() {
     const [ loading, setLoading ] = useState(false)
     const [ successful, setSuccessful ] = useState(false)
+    const [ query, setQuery ] = useState('')
+    const inputEl = useRef(null);
+    useEffect(() => inputEl.current.focus())
 
-    const handle = query => {
+    const handle = () => {
         setLoading(true)
         fetch('/api/take/' + query)
             .then(() => {
@@ -22,7 +25,13 @@ export function Take() {
             :
             <>
                 <p>Scan a book before taking it.</p>
-                <input type="text" onKeyPress={evt => evt.charCode===13 && handle(evt.target.value)}/>
+                <p><input ref={inputEl} type="text"
+                    onChange={evt => setQuery(evt.target.value)}
+                    onKeyPress={evt => {evt.charCode===13 && handle()}}
+                /> <i className="bi bi-upc-scan"/></p>
+                <p><button disabled={query === ''} className="btn btn-primary" onClick={handle}>
+                    <i className="bi bi-box-arrow-up"/> Take
+                </button></p>
             </>
         }
         {successful &&
@@ -31,8 +40,11 @@ export function Take() {
             </div>
         }
 
+        <hr/>
         <p>
-            <Link className="btn btn-primary" to="/">Back</Link>
+            <Link className="btn btn-secondary" to="/">
+                <i className="bi bi-house"/> Go Back
+            </Link>
         </p>
     </>
 }
