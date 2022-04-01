@@ -13,7 +13,13 @@ const stateTexts = {
     damaged: 'Damaged'
 };
 
-export function State({value}) {
+export type StateEnum = 'due' | 'available' | 'missing' | 'damaged'
+
+interface StateProps {
+    value: StateEnum
+}
+
+export function State({value} : StateProps) {
     const name = stateNames[value]
     const text = stateTexts[value]
     return <span className={`badge bg-${name}`}>{text}</span>;

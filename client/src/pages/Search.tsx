@@ -1,13 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Loading from 'react-simple-loading';
 import { Book } from '../components/Book';
 
 export function Search() {
-    const [ results, setResults ] = useState(false)
+    const [ results, setResults ] = useState<any[]>([])
     const [ loading, setLoading ] = useState(false)
     const [ query, setQuery ] = useState('')
-    const inputEl = useRef(null);
+    const inputEl = useRef<HTMLInputElement>(null);
     useEffect(() => inputEl?.current?.focus())
 
     const search = () => {
@@ -23,7 +22,9 @@ export function Search() {
     return <>
         <h2>Search</h2>
         {loading ?
-            <Loading />
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
             :
             <>
                 <p>Search by title, author or ISBN</p>
@@ -37,9 +38,9 @@ export function Search() {
             </>
         }
         {results === [] && <div>No results found</div>}
-        {results &&
+        {results !== [] &&
             <div className="d-grid gap-3">
-                <h3>{results.length} Results</h3>
+                <h3>{results?.length ? `${results.length} results` : 'No results' }</h3>
                 {results.map(res => <Book {...res}/>)}
             </div>
         }

@@ -1,13 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Loading from 'react-simple-loading';
 
 export function Take() {
     const [ loading, setLoading ] = useState(false)
     const [ successful, setSuccessful ] = useState(false)
     const [ query, setQuery ] = useState('')
-    const inputEl = useRef(null);
-    useEffect(() => inputEl.current.focus())
+    const inputEl = useRef<HTMLInputElement>(null);
+    useEffect(() => inputEl?.current?.focus())
 
     const handle = () => {
         setLoading(true)
@@ -21,7 +20,9 @@ export function Take() {
     return <>
         <h2>Take</h2>
         {loading ?
-            <Loading />
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
             :
             <>
                 <p>Scan a book before taking it.</p>
