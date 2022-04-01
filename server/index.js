@@ -1,72 +1,17 @@
 const sqlite3 = require('sqlite3').verbose();
 const express = require('express');
+const library = require('./library');
 const dotenv = require('dotenv').config();
-const { DB_FILE, PORT } = process.env;
+const { DB_FILE, PORT, PUBLIC_PATH } = process.env;
 
 
 const database = new sqlite3.Database(DB_FILE)
 const app = express()
-app.get('/search/:query', (req, res) => {
-    const { query } = req.params
-    database.all(
-        statements.search,
-        [`%${query}%`, `%${query}%`, query],
-        async (err, rows) => {
-            res.send(rows);
-        }
-    )
-})
-app.get('/author/:query', (req, res) => {
-    const { query } = req.params
-    database.all(
-        statements.author,
-        [query],
-        async (err, rows) => {
-            res.send(rows);
-        }
-    )
-})
-app.get('/category/:query', (req, res) => {
-    const { query } = req.params
-    database.all(
-        statements.category,
-        [query],
-        async (err, rows) => {
-            res.send(rows);
-        }
-    )
-})
-app.get('/return/:isbn', (req, res) => {
-    const { isbn } = req.params
-    database.run(
-        statements.return, [isbn],
-        async (err, rows) => {
-            console.log(err, rows)
-            res.send(rows);
-        }
-    )
-})
-app.get('/take/:isbn', (req, res) => {
-    const { isbn } = req.params
-    database.run(
-        statements.take, [isbn],
-        async (err, rows) => {
-            console.log(err, rows)
-            res.send(rows);
-        }
-    )
-})
 
-const statements = {
-    search: 'select * from books where title like ? or author like ? or isbn = ?;',
-    author: 'select * from books where author = ?;',
-    category: 'select * from books where category = ?;',
-    return: 'update books set state = "available" where id in (select id from books where isbn = ? and state = "due" limit 1);',
-    take: 'update books set state = "due" where id in (select id from books where isbn = ? and state = "available" limit 1);',
-}
+app.use(express.static(PUBLIC_PATH))
+app.use('/api', library({database}))
 
-database.serialize(() => {
-    app.listen(PORT)
+
+app.listen(PORT, () => {
     console.log("Listening on port " + PORT)
-});
-
+})
