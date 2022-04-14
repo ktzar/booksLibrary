@@ -1,7 +1,13 @@
-FROM node:17-alpine3.14
+FROM node:17-alpine
 
-ADD server /app
-RUN npm i -g yarn
-RUN cd server;
-RUN yarn
+ENV DB_FILE=./books.db
+ENV PUBLIC_PATH=public
+ENV PORT=8080
 
+WORKDIR /app
+COPY server ./
+RUN npm install
+COPY books.db ./
+
+EXPOSE 8080
+CMD node ./index

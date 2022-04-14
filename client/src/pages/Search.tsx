@@ -9,10 +9,10 @@ const fetchJson = (url : string) => {
 }
 
 export function Search() {
-    const [ results, setResults ] = useState([])
-    const [ typeahead, setTypeahead ] = useState([])
-    const [ loading, setLoading ] = useState(false)
+    const [ results, setResults ] = useState<any[]>([])
+    const [ typeahead, setTypeahead ] = useState<any[]>([])
     const [ query, setQuery ] = useState('')
+    const [ loading, setLoading ] = useState(false)
 
     const handleSearch = (term : string = '') => {
         setLoading(true)
@@ -57,21 +57,24 @@ export function Search() {
                     onKeyPress={evt => evt.charCode === 13 && handleSearch()}/>
             </>
         }
-        {results === [] && <div>No results found</div>}
         {typeahead &&
             <div className="d-grid gap-1">
                 {typeahead.map(res => <TypeaheadResult onFollow={handleTypeaheadResult} val={res} />
                 )}
             </div>
         }
-        {results &&
+        {results === [] && <div>No results found</div>}
+        {results !== [] &&
             <div className="d-grid gap-3">
+                <h3>{results?.length ? `${results.length} results` : 'No results' }</h3>
                 {results.map(res => <Book {...res}/>)}
             </div>
         }
     <hr/>
         <p>
-            <Link className="btn btn-primary" to="/">Back</Link>
+            <Link className="btn btn-secondary" to="/">
+                <i className="bi bi-house"/> Go Back
+            </Link>
         </p>
     </>
 }
