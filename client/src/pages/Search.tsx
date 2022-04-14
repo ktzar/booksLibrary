@@ -54,20 +54,22 @@ export function Search() {
                 <input type="text"
                     value={query}
                     onChange={evt => {setQuery(evt.target.value); handleTypeahead(evt.target.value)}}
-                    onKeyPress={evt => evt.charCode === 13 && handleSearch()}/>
+                    onKeyPress={evt => evt.charCode === 13 && handleSearch()}/>{' '}
+                <button className="btn btn-primary" onClick={() => handleSearch()}><i className="bi bi-search"/> Search</button>
             </>
         }
-        {typeahead &&
-            <div className="d-grid gap-1">
-                {typeahead.map(res => <TypeaheadResult onFollow={handleTypeaheadResult} val={res} />
+        {query && typeahead?.length &&
+            <div className="d-grid gap-1 border shadow p-3 mb-5 bg-body rounded">
+                <h6 className="text-start text-capitalize text-secondary fst-italic">Some suggestions...</h6>
+                {typeahead.map(res => <TypeaheadResult key={res} onFollow={handleTypeaheadResult} val={res} />
                 )}
             </div>
         }
-        {results === [] && <div>No results found</div>}
+        {results === [] && query && <div>No results found</div>}
         {results !== [] &&
             <div className="d-grid gap-3">
-                <h3>{results?.length ? `${results.length} results` : 'No results' }</h3>
-                {results.map(res => <Book {...res}/>)}
+                <h3>{results?.length ? `${results.length} result(s)` : 'No results' }</h3>
+                {results.map(res => <Book key={res.id} {...res}/>)}
             </div>
         }
     <hr/>
