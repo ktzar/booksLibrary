@@ -22,7 +22,7 @@ export function Search() {
                 setResults(data);
                 setLoading(false);
                 setQuery('')
-                setTypeahead('')
+                setTypeahead([])
             })
             .catch( () => {
                 setResults([]);
