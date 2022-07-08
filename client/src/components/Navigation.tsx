@@ -10,16 +10,16 @@ export const Navigation = () => (
             <div className="collapse navbar-collapse" id="navbarText">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     <li className="nav-item">
-                        <NavLink className="nav-link" activeClassName="active" to="/">Home</NavLink>
+                        <NavLink className={({isActive}) => `nav-link ${isActive?'active':''}`} to="/">Home</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink className="nav-link" activeClassName="active" to="/search">Search</NavLink>
+                        <NavLink className={({isActive}) => `nav-link ${isActive?'active':''}`} to="/search">Search</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink className="nav-link" activeClassName="active" to="/take">Take</NavLink>
+                        <NavLink className={({isActive}) => `nav-link ${isActive?'active':''}`} to="/take">Take</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink className="nav-link" activeClassName="active" to="/return">Return</NavLink>
+                        <NavLink className={({isActive}) => `nav-link ${isActive?'active':''}`} to="/return">Return</NavLink>
                     </li>
                 </ul>
             </div>
